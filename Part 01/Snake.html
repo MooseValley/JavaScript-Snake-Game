@@ -1,0 +1,115 @@
+<canvas id="graphicsContext" width="400" height="400"> </canvas>
+<script>
+// JavaScript Snake Game by Moose OMalley, 18-May-2020
+// * Source code in my GitHub:    https://github.com/MooseValley/JavaScript-Snake-Game
+// * YouTube video for this game: https://youtu.be/hvHSvAHvrAY
+// * My YouTube channel: https://www.youtube.com/user/MoosesValley/videos
+// * My web page: Moose's Software Valley - Established July, 1996,
+//   https://rebrand.ly/MoosesSoftware
+
+// Setup the new window:
+window.onload = function()
+{
+   canv = document.getElementById ("graphicsContext");
+
+   context = canv.getContext("2d");
+
+   document.addEventListener ("keydown", keyPush);
+
+   setInterval (gameLoop, 1000 / 15); // 15 fps
+}
+
+// Set up the game and player parameters:
+// Player vertical and horizontal velocities:
+xVel = 0;
+yVel = 0;
+
+// Game grid size and cell size - see the 400 x 400 above.
+gridSize  = 20;
+tileCount = 20;
+
+// Initial player position:
+pX = 10;
+pY = 10;
+
+// Initial Apple Position
+aX = 15;
+aY = 5;
+
+// Starting snake tail and length of the tail:
+snakeTailArray = [];
+tailLength     = 5;
+
+// Main Game Loop
+function gameLoop()
+{
+   // Moving the Snake according to their velocity:
+   pX += xVel; // pX = pX + xVel
+   pY += yVel;
+
+   // Checking for going beyond the game grid:
+   if (pX < 0)
+      pX = tileCount - 1;
+   if (pX > tileCount - 1)
+      pX = 0;
+
+   if (pY < 0)
+      pY = tileCount - 1;
+   if (pY > tileCount - 1)
+      pY = 0;
+
+   // Fill the Game Grid (canvas) to black:
+   context.fillStyle="black";
+   context.fillRect (0, 0, canv.width, canv.height);
+
+   // Draw the snake and its tail:
+   context.fillStyle="lime";
+   for (var i = 0; i < snakeTailArray.length; i++)
+   {
+       context.fillRect (snakeTailArray[i].x * gridSize,
+                         snakeTailArray[i].y * gridSize,
+                         gridSize - 2, gridSize - 2);
+       // Have we eaten our tail ?
+       if (pX == snakeTailArray[i].x && pY == snakeTailArray[i].y)
+          tailLength = 5;
+   }
+
+   // Move the snake along:
+   snakeTailArray.push ({x:pX, y:pY});
+   while (snakeTailArray.length > tailLength)
+   {
+       snakeTailArray.shift();
+   }
+
+   // Check if we have eaten an Apple:
+   if (pX == aX && pY == aY)
+   {
+      tailLength++;
+
+      // Add an new apple (random location):
+      aX = Math.floor (Math.random() * tileCount);
+      aY = Math.floor (Math.random() * tileCount);
+   }
+
+   // Draw the Apple:
+   context.fillStyle="red";
+   context.fillRect (aX * gridSize, aY * gridSize, gridSize - 2, gridSize - 2);
+}
+
+// Act on user input - arrow keys:
+function keyPush (evt)
+{
+   switch (evt.keyCode)
+   {
+      case 37: xVel = -1; yVel = 0; // Left Arrow
+               break;
+      case 38: xVel = 0;  yVel = -1; // Up Arrow
+               break;
+      case 39: xVel =  1; yVel = 0; // Right Arrow
+               break;
+      case 40: xVel =  0; yVel = 1; // Down Arrow
+               break;
+   }
+}
+
+</script>

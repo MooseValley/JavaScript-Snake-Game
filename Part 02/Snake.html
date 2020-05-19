@@ -45,7 +45,7 @@ appleY = Math.floor (Math.random() * tileCountY);
 
 // Starting snake tail and length of the tail:
 snakeTailArray = [];
-tailLength     = 1;
+tailLength     = 5;
 
 
 function drawCell (col, x, y)
@@ -90,7 +90,7 @@ function gameLoop()
 
        // Have we eaten our tail ?
        if (playerX == snakeTailArray[i].x && playerY == snakeTailArray[i].y)
-          tailLength = 1;
+          tailLength = 5;
    }
 
    // Move the snake along:
